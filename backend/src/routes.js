@@ -1,13 +1,10 @@
 const { Router } = require('express');
 const User = require('./app/models/User');
+const SessionController = require('./app/controllers/SessionController')
 
 
-const routes = Router();
+const routes = new Router();
 
-routes.get('/', async (req, res) => {
-  const user = await User.findOne({ where: { name: 'Distribuidora FastFeet' } })
-
-  return res.json(user);
-});
+routes.post('/sessions', SessionController.store);
 
 module.exports = routes;
