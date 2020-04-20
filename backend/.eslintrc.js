@@ -14,13 +14,16 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018,
+    'ecmaVersion': 2018,
+    'sourceType': 'module',
+    'parser': 'babel-eslint'
   },
   rules: {
-    "prettier/prettier": "error",
-    "class-methods-use-this": "off",
-    "no-param-reassing": "off",
-    "camelcase": "off",
-    "no-unused-vars": ["error", { "argsIgnorePatten": "next" }],
-  },
+    'prettier/prettier': 'error',
+    'semi': ['error', 'always'],
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
+    'camelcase': 'off',
+    'no-unused-vars': ['error', { 'argsIgnorePattern': 'next' }]
+  }
 };

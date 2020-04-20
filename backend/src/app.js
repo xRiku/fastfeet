@@ -1,6 +1,8 @@
 const express = require('express');
 const routes = require('./routes');
 
+require('./database');
+
 class App {
   constructor() {
     this.server = express();
@@ -16,12 +18,5 @@ class App {
     this.server.use(routes);
   }
 };
-
-// const app = express();
-
-// app.use(express.json());
-
-// app.use(routes);
-
 
 module.exports = new App().server;
