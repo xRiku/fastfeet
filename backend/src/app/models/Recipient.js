@@ -14,7 +14,9 @@ class Recipient extends Model {
     {
       sequelize,
     });
+
+    return this;
   }
 };
 
-module.exports = new Recipient();
+module.exports = Recipient;
