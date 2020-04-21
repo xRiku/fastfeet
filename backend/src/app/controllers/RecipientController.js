@@ -7,7 +7,12 @@ class RecipientController {
   }
 
   async update(req, res) {
-    return res.json({text: 'ok'});
+    const { id } = req.params;
+    const recipient = await Recipient.findByPk(id);
+
+    const updatedRecipient = await recipient.update(req.body);
+
+    return res.json(updatedRecipient);
   }
 }
 

@@ -8,6 +8,6 @@ const routes = new Router();
 routes.post('/sessions', SessionController.store);
 routes.use(authMiddlware);
 routes.post('/recipients', RecipientController.store);
-routes.put('/recipients', RecipientController.update);
+routes.put('/recipients/:id', RecipientController.update);
 
 module.exports = routes;
