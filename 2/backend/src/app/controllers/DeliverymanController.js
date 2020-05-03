@@ -10,6 +10,17 @@ class DeliverymanController {
     const deliverymen = await Deliveryman.findAll();
     return res.json(deliverymen);
   }
+
+  async update(req, res) {
+    const { id } = req.params;
+    const deliveryman = await Deliveryman.findByPk(id);
+    const updatedDeliveryman = await deliveryman.update(req.body);
+    return res.json(updatedDeliveryman);
+  }
+
+  async delete(req, res) {
+    return res.json();
+  }
 }
 
 module.exports = new DeliverymanController();
