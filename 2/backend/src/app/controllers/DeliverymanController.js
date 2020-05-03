@@ -7,7 +7,8 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    return res.json({ status: 'ok' });
+    const deliverymen = await Deliveryman.findAll();
+    return res.json(deliverymen);
   }
 }
 
