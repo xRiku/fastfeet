@@ -1,4 +1,5 @@
 const Deliveryman = require('../models/Deliveryman');
+const File = require('../models/File');
 
 class DeliverymanController {
   async store(req, res) {
@@ -14,7 +15,16 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const deliverymen = await Deliveryman.findAll();
+    const deliverymen = await Deliveryman.findAll({
+      attributes: ['id', 'name', 'email', 'avatar_id'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'filename', 'url'],
+        },
+      ],
+    });
     return res.json(deliverymen);
   }
 
