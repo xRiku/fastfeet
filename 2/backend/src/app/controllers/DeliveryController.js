@@ -22,6 +22,13 @@ class DeliveryController {
   async index(req, res) {
     return res.json();
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const delivery = await Delivery.findByPk(id);
+    await delivery.destroy();
+    return res.json({ message: 'Order was succesfully deleted' });
+  }
 };
 
 module.exports = new DeliveryController();
