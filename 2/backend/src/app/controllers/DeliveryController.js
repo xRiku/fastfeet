@@ -2,7 +2,8 @@ const Delivery = require("../models/Delivery");
 
 class DeliveryController {
   async store(req, res) {
-    return res.json({ status: 'ok' });
+    const order = await Delivery.create(req.body);
+    return res.json(order);
   }
 
   async index(req, res) {
