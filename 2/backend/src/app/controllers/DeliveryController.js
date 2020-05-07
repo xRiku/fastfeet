@@ -20,7 +20,8 @@ class DeliveryController {
   }
 
   async index(req, res) {
-    return res.json();
+    const deliveries = await Delivery.findAll();
+    return res.json(deliveries);
   }
 
   async delete(req, res) {

@@ -23,7 +23,9 @@ routes.post('/deliverymen', DeliverymanController.store);
 routes.get('/deliverymen', DeliverymanController.index);
 routes.put('/deliverymen/:id', DeliverymanController.update);
 routes.delete('/deliverymen/:id', DeliverymanController.delete);
+
 routes.post('/deliveries', DeliveryController.store);
+routes.get('/deliveries', DeliveryController.index);
 routes.delete('/deliveries/:id', DeliveryController.delete);
 
 routes.post('/files', upload.single('file'), FileController.store);
