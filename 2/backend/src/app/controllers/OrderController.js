@@ -1,11 +1,11 @@
 const {
   parseISO,
-  format,
   setHours,
   setMinutes,
   setSeconds,
   isBefore,
   isAfter,
+  isEqual,
 } = require('date-fns');
 
 const Deliveryman = require('../models/Deliveryman');
@@ -18,13 +18,15 @@ class OrderController {
       where: {
         id,
       },
-      include: [{
-        model: Delivery,
-        as: 'deliveries',
-        where: {
-          deliveryman_id: id,
-        }
-      }]
+      include: [
+        {
+          model: Delivery,
+          as: 'deliveries',
+          where: {
+            deliveryman_id: id,
+          },
+        },
+      ],
     });
     return res.json(orders);
   }
@@ -37,6 +39,7 @@ class OrderController {
     if (!order) {
       return res.status(400).json({ error: 'Order is not available' });
     }
+
     const parsedDateStart = parseISO(start_date);
 
     const lowerLimit = setSeconds(
@@ -48,18 +51,19 @@ class OrderController {
       0
     );
 
-    const validTime = isAfter(parsedDateStart, lowerLimit) || 
-      isBefore(parsedDateStart, higherLimit);
-
-    if (!validTime){
+    const validTime =
+      (isAfter(parsedDateStart, lowerLimit) &&
+        isBefore(parsedDateStart, higherLimit)) ||
+      isEqual(parsedDateStart, higherLimit) ||
+      isEqual(parsedDateStart, lowerLimit);
+    if (!validTime) {
       return res.status(400).json({
-        error: 'Start time should only be between 8:00 and 18:00'
+        error: 'Start time should only be between 8:00 and 18:00',
       });
     }
 
     const updatedOrder = await order.update({ start_date });
     return res.json(updatedOrder);
-
   }
 }
 
