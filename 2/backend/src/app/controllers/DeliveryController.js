@@ -19,10 +19,19 @@ class DeliveryController {
     return res.json(order);
   }
 
+
   async index(req, res) {
     const deliveries = await Delivery.findAll();
     return res.json(deliveries);
   }
+
+  async update(req, res) {
+    const { id } = req.params;
+    const order = await Delivery.findByPk(id);
+    const updatedOrder = await order.update(req.body);
+    return res.json(updatedOrder);
+  }
+
 
   async delete(req, res) {
     const { id } = req.params;
