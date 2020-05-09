@@ -57,16 +57,15 @@ class OrderController {
               [Op.ne]: null,
             },
           },
+          include: [
+            {
+              model: File,
+              as: 'signature',
+              attributes: ['id', 'filename', 'url'],
+            },
+          ],
         },
       ],
-    });
-
-    orders.deliveries.map(async (delivery) => {
-      delivery.file = await File.findOne({
-        where: {
-          id,
-        },
-      });
     });
 
     return res.json(orders);
