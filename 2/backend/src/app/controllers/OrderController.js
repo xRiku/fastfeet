@@ -14,6 +14,7 @@ const { Op } = require('sequelize');
 
 const Deliveryman = require('../models/Deliveryman');
 const Delivery = require('../models/Delivery');
+const File = require('../models/File');
 
 class OrderController {
   async index(req, res) {
@@ -58,6 +59,14 @@ class OrderController {
           },
         },
       ],
+    });
+
+    orders.deliveries.map(async (delivery) => {
+      delivery.file = await File.findOne({
+        where: {
+          id,
+        },
+      });
     });
 
     return res.json(orders);
