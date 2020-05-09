@@ -66,9 +66,21 @@ class OrderController {
   async update(req, res) {
     const { id, order_id } = req.params;
     const order = await Delivery.findByPk(order_id);
-    const { removal } = req.body;
+    const { removal, deliveryFinished } = req.body;
     const todaysDate = new Date();
     const start_date = new Date();
+
+    if (deliveryFinished) {
+      const { signature_id } = req.body;
+      if (!signature_id) {
+        return res
+          .status(400)
+          .json({ error: 'Image is not specified or id is invalid' });
+      }
+      const end_date = new Date();
+      const updatedOrder = await order.update({ signature_id, end_date });
+      return res.json(updatedOrder);
+    }
 
     if (!order) {
       return res.status(400).json({ error: 'Order is not available' });
