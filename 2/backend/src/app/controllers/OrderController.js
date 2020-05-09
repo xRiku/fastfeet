@@ -6,7 +6,11 @@ const {
   isBefore,
   isAfter,
   isEqual,
+  startOfDay,
+  endOfDay,
 } = require('date-fns');
+
+const { Op } = require('sequelize');
 
 const Deliveryman = require('../models/Deliveryman');
 const Delivery = require('../models/Delivery');
@@ -34,10 +38,16 @@ class OrderController {
   async update(req, res) {
     const { id, order_id } = req.params;
     const order = await Delivery.findByPk(order_id);
-    const { start_date } = req.body;
+    const { removal } = req.body;
+    const todaysDate = new Date();
+    const start_date = new Date();
 
     if (!order) {
       return res.status(400).json({ error: 'Order is not available' });
+    }
+
+    if (order.deliveryman_id !== Number(id)) {
+      return res.status(401).json({ error: 'Invalid id' });
     }
 
     const parsedDateStart = parseISO(start_date);
@@ -56,9 +66,25 @@ class OrderController {
         isBefore(parsedDateStart, higherLimit)) ||
       isEqual(parsedDateStart, higherLimit) ||
       isEqual(parsedDateStart, lowerLimit);
+
     if (!validTime) {
       return res.status(400).json({
         error: 'Start time should only be between 8:00 and 18:00',
+      });
+    }
+
+    const orderCounter = await Delivery.count({
+      where: {
+        deliveryman_id: id,
+        start_date: {
+          [Op.between]: [startOfDay(todaysDate), endOfDay(todaysDate)],
+        },
+      },
+    });
+
+    if (orderCounter >= 5 && removal) {
+      return res.status(400).json({
+        error: 'Deliveryman can only make up to 5 deliveries per day',
       });
     }
 
