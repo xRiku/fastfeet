@@ -18,6 +18,30 @@ const Delivery = require('../models/Delivery');
 class OrderController {
   async index(req, res) {
     const { id } = req.params;
+    let { delivered = true } = req.query;
+
+    if (delivered === 'false') {
+      delivered = false;
+    }
+
+    if (!delivered) {
+      const orders = await Deliveryman.findOne({
+        where: {
+          id,
+        },
+        include: [
+          {
+            model: Delivery,
+            as: 'deliveries',
+            where: {
+              deliveryman_id: id,
+            },
+          },
+        ],
+      });
+      return res.json(orders);
+    }
+
     const orders = await Deliveryman.findOne({
       where: {
         id,
@@ -28,10 +52,14 @@ class OrderController {
           as: 'deliveries',
           where: {
             deliveryman_id: id,
+            end_date: {
+              [Op.ne]: null,
+            },
           },
         },
       ],
     });
+
     return res.json(orders);
   }
 
@@ -82,7 +110,7 @@ class OrderController {
       },
     });
 
-    if (orderCounter >= 5 && removal) {
+    if (orderCounter >= 5 && removal === true) {
       return res.status(400).json({
         error: 'Deliveryman can only make up to 5 deliveries per day',
       });
