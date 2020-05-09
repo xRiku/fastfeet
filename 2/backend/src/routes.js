@@ -7,6 +7,7 @@ const DeliverymanController = require('./app/controllers/DeliverymanController')
 const FileController = require('./app/controllers/FileController');
 const DeliveryController = require('./app/controllers/DeliveryController');
 const OrderController = require('./app/controllers/OrderController');
+const DeliveryProblemController = require('./app/controllers/DeliveryProblemController');
 
 const authMiddlware = require('./app/middlewares/auth');
 
@@ -32,6 +33,8 @@ routes.delete('/deliveries/:id', DeliveryController.delete);
 
 routes.get('/deliverymen/:id/deliveries', OrderController.index);
 routes.put('/deliverymen/:id/deliveries/:order_id', OrderController.update);
+
+routes.post('/deliveryproblems/', DeliveryProblemController.store);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
