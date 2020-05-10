@@ -40,6 +40,19 @@ class DeliveryProblemController {
 
     return res.json(problems);
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const problem = await DeliveryProblem.findOne({ where: { id }, raw: true });
+    if (!problem) {
+      return res.status(400).json({ error: 'Invalid problem' });
+    }
+
+    const deliveryId = problem.delivery_id;
+    const delivery = await Delivery.findByPk(deliveryId);
+    delivery.update({ canceled_at: new Date() });
+    return res.json(delivery);
+  }
 }
 
 module.exports = new DeliveryProblemController();
