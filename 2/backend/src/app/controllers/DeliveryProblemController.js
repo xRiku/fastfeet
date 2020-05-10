@@ -30,12 +30,16 @@ class DeliveryProblemController {
 
   async index(req, res) {
     const { id } = req.params;
-    const delivery = await Delivery.findByPk(id);
-    if (!delivery) {
-      return res.status(400).json({ error: 'Invalid delivery id' });
+    let where;
+    if (id) {
+      where = {
+        delivery_id: id,
+      };
+    } else {
+      where = {};
     }
     const problems = await DeliveryProblem.findAll({
-      where: { delivery_id: id },
+      where,
     });
 
     return res.json(problems);
